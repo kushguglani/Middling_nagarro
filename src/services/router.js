@@ -7,6 +7,7 @@ import Login from '../container/formContainer';
 // import FeedEventsProp from '../component/feeds';
 import NewArticle from '../container/createArticle'
 import UserSettings from '../container/userSettings'
+import UserPage from '../container/userPage'
 import FeedPage from '../container/feedPage'
 import Base from '../component/base';
 import PrivateRoute from './privateRoute'
@@ -24,6 +25,7 @@ const routes = (
         <Route path="/newArticle" ><Base> <NewArticle /> </Base></Route>
         <Route path="/settings" ><Base> <UserSettings /> </Base></Route>
         <Route path="/articles/:id" ><Base> <FeedPage /> </Base></Route>
+        <Route path="/user/:id" ><Base> <UserPage /> </Base></Route>
         <PrivateRoute path="/signup" ><Base> <Login /></Base> </PrivateRoute>
     </Switch>
 )

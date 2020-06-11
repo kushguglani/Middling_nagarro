@@ -51,8 +51,6 @@ export const changeActiveTab = (tab) => {
 }
 
 export const fetchConditionalFeeds = (by, tag, val = 0, header = {}) => {
-    
-
     return dispatch => {
         by === "tag" && dispatch(addSelectedTag(tag))
         dispatch(startSpinner("feedLoader"))

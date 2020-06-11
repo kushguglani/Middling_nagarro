@@ -9,7 +9,7 @@ class TabPane extends Component {
     handleItemClick = (e, { name }) => this.setState({ activeItem: name })
     render() {
         
-        const { feedLoader, feeds, userDetails, activeIndex,
+        const { feedLoader, feeds, userDetails, activeIndex,userClicked,
             selectedTag, fetchFeeds, fetchConditionalFeeds, isUserLogin, favoriteArticle } = this.props;
         let header = {}
         if (userDetails.token)
@@ -61,7 +61,7 @@ class TabPane extends Component {
                     </Menu.Item>
                 </Menu>
                 {feedLoader ?
-                    <Spinner text="Fetching Feeds" /> : <Feeds feeds={feeds} favoriteArticle={favoriteArticle} />}
+                    <Spinner text="Fetching Feeds" /> : <Feeds userClicked={userClicked} feeds={feeds} favoriteArticle={favoriteArticle} />}
             </>
         )
     }

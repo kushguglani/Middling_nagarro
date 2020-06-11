@@ -15,13 +15,10 @@ export default function UserComment(props) {
                     <div>{daysAgo(createdAt)}</div>
                 </Comment.Metadata>
                 {author.username === props.loginUsername ? <Comment.Metadata>
-                    {/* <div>Delete</div> */}
                     <Icon name="delete" size='big' onClick={() => props.deleteCommentToArticle(id)} />
                 </Comment.Metadata> : ""}
-                {/* <Comment.Author as='a' align="right">Delete</Comment.Author> */}
                 <Comment.Text>{body}</Comment.Text>
                 <Comment.Actions>
-                    {/* <Comment.Action>Reply</Comment.Action> */}
                 </Comment.Actions>
             </Comment.Content>
         </Comment>

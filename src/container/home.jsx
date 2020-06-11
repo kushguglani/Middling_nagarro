@@ -87,6 +87,10 @@ class Home extends Component {
         }
 
     }
+    userClicked=(to)=>{
+        this.props.history.push(to)
+
+    }
     render() {
         const { tags, userFeeds, panes, selectedTag, userDetails, isUserLogin,
             feedLoader, fetchConditionalFeeds, fetchFeeds, activeTab, tagLoader,
@@ -96,7 +100,7 @@ class Home extends Component {
                 <Grid.Column width={11}>
                     <TabPane activeIndex={activeTab} feeds={userFeeds} selectedTag={selectedTag} fetchFeeds={fetchFeeds}
                         panes={panes} feedLoader={feedLoader} fetchConditionalFeeds={fetchConditionalFeeds}
-                        userDetails={userDetails} isUserLogin={isUserLogin}
+                        userDetails={userDetails} isUserLogin={isUserLogin} userClicked={this.userClicked}
                         favoriteArticle={this.favoriteArticleClicked} />
                     {searchValue === "" ?
                         <Pagination
