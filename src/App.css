@@ -1,38 +1,94 @@
-.App {
+.header-logo{
+  font-family: cursive;
+  padding: 10px 10px 0 10px
+} 
+h1.ui.header {
+    font-size: 2rem;
+    font-family: cursive;
+    margin-top: 1px;
+}
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: rgb(238, 234, 234);
+  color: black;
+  padding: 5px;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+
+.ui.placeholder.segment .column .button, .ui.placeholder.segment .column .field, .ui.placeholder.segment .column textarea, .ui.placeholder.segment .column>.ui.input {
+  max-width: 20rem;
+}
+.feedTitle{
+  margin: 10px 0 0 0;
+}
+.ui.feed>.event>.label {
+  margin: auto 0;
+}
+.hr-line{
+  border-bottom: 1px solid #ddd;
+}
+.feed-like{
+  float: right;
+  padding-right: 10px !important;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.feedContainerGrid{
+
+  padding-top:10px;
+  margin: 0 !important;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+
+.ui.feed{
+  overflow: auto;
+    max-height: 62vh;
+    padding: 10px!important;
+    box-shadow: 0 1px 2px 0 rgba(34,36,38,.15);
+    border-radius: .28571429rem;
+    border: 1px solid rgba(34,36,38,.15);
+}
+.tag-cursor{
+  cursor: pointer;
+}
+.ui-segment{
+  min-height: 12vh;
+}
+.displayNone{
+  display: none !important;
+}
+.header-title{
+  font-size: 13px;
+  font-style: italic;
+}
+.createArticle{
+  width: 80%;
+  margin: 25px auto;
+}
+.createArticle .input, 
+.createArticle textarea,
+.tag-label-group{
+  margin-bottom: 20px !important;
+}
+.createArticleHeight{
+  height: 50px !important;
+}
+textarea { 
+  padding:10px;
+  resize:vertical; 
+  width: 100%;
+  
+}
+.desc-text{
+  margin-bottom: 10px !important;
 }
 
-.App-link {
-  color: #61dafb;
+.margin-bottom-footer{
+  margin-bottom: 42px !important;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.comment-textbox textarea{
+  height: auto !important;
 }

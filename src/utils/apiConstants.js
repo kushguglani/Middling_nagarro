@@ -1,0 +1,14 @@
+export const BASEURL = "https://conduit.productionready.io/api/";
+export const LOGIN  ="users/login";
+export const REGISTRATION  ="users";
+export const CURRENT_USER  ="user";
+export const UPDATE_USER  ="user";
+export const PROFILE  ="profiles";
+export const FOLLOW  ="/follow";
+export const UNFOLLOW_USER  ="profiles/:username/follow";
+export const ARTICLES = "articles";
+// export const CREATE_ARTICLES = "articles";
+export const UPDATE_ARTICLES = "articles/:slug";
+export const DELETE_ARTICLES = "articles/:slug";
+export const ADD_COOMENTS_ARTICLES = "articles/:slug/comments";
+export const GET_TAGS = "tags";
