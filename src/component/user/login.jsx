@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { Button, Form, Input, Checkbox } from 'semantic-ui-react';
 
-
+import {buttonConstant} from '../../utils/userConstant'
 
 const FormExampleForm = (props) => {
   const [loginObject, setLoginObject] = useState({ email: "", password: "" });
-  // const { password, setPassword } = useState('');
   const handleInputChange = (event) => {
     let { name, value } = event.target;
     setLoginObject({
@@ -25,8 +24,8 @@ const FormExampleForm = (props) => {
       <Form.Field>
         <Checkbox label='Remember Me' />
       </Form.Field>
-      <Button onClick={() => userLogin(loginObject)} type='submit'>Login</Button>
-     
+      <Button onClick={() => userLogin(loginObject)} type='submit'>{buttonConstant.signin}</Button>
+
     </Form>
 
   )

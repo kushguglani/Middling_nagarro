@@ -6,7 +6,6 @@ const Spinner = (props) => (
         <Segment className="ui-segment">
             <Dimmer active inverted>
                 <Loader content={props.text} inverted indeterminate/>
-                
             </Dimmer>
         </Segment>
     </div>

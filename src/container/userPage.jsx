@@ -1,29 +1,23 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { withRouter, Link } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import {
-    Segment, Container, Comment, Menu,
-    Icon, Label, Form, Button, Header, Image
+    Header, Image, Button, Label, Icon
 } from 'semantic-ui-react'
 
-import { daysAgo } from '../services/helperFunction'
-import {
-    fetchArticleBySlag,
-    fetchCommnetsBySlag,
-    addCommentToArticle,
-    deleteCommentToArticle,
-    favoriteArticleFeedPage,
-    followUser,
-    fetchUser,
-    fetchConditionalFeeds
-} from "../redux/action/feed";
-import Spinner from '../component/loader'
-import Feeds from '../component/feed/feeds'
+import Home from './home'
 
+import {
+    fetchUser,
+} from "../redux/action/feed";
+
+import {
+    followUser,
+} from "../redux/action/feed";
 
 export class FeedPage extends Component {
-    state = { article: {}, comments: [], user: {}, body: "", disabled: true, username: "", activeIndex: "author" }
+    state = { user: {}, }
 
 
     componentDidMount() {
@@ -33,35 +27,83 @@ export class FeedPage extends Component {
         }
         const path = this.props.location.pathname;
         const username = path.replace("/user/", "")
-        console.log(username);
-
         fetchUser(header, username).then(res => {
             console.log(res);
             this.setState({
-                user: res.data.profile,
-                username
+                user: res.data.profile
             })
         })
-        this.props.fetchConditionalFeeds(this.state.activeIndex, username, 0, header)
+            .catch(err => {
+                console.log("rdtyoipiuytryuiopliujh");
+                console.log(err);
+                console.log(err.response);
+                this.props.history.push("/")
+
+            })
+
     }
-    fetchFeeds = (e, { name }) => {
+    componentDidUpdate() {
         let header = {};
         if (this.props.userDetails.token) {
             header = { Authorization: "Token " + this.props.userDetails.token }
         }
-        this.setState({
-            activeIndex: name
-        }, () => {
-            this.props.fetchConditionalFeeds(this.state.activeIndex, this.state.username, 0, header)
-        })
-    }
+        const path = this.props.location.pathname;
+        const username = path.replace("/user/", "")
+        fetchUser(header, username).then(res => {
+            console.log("rdtyoipiuytryuiopliujh");
+            console.log(res);
 
-    render() {
-        const { user, activeIndex } = this.state;
-        const { feedLoader, feeds, fetchConditionalFeeds } = this.props;
-        let header;
+            if (this.state.user.username !== res.data.profile.username) {
+                this.setState({
+                    user: res.data.profile
+                })
+            }
+        })
+            .catch(err => {
+                this.props.history.push("/")
+                console.log(err);
+                console.log(err.response);
+
+            })
+    }
+    followUser = () => {
+        let header = {};
         if (this.props.userDetails.token) {
-            header = { Authorization: "Token " + this.props.userDetails.token }
+            header = {
+                Authorization: "Token " + this.props.userDetails.token
+            }
+
+            let user = this.state.user.username;
+            let method = this.state.user.following ? "DELETE" : "POST"
+            followUser(header, user, method).then(res => {
+
+                this.setState({
+                    user: res.data.profile
+                })
+
+            })
+                .catch(err => {
+
+                    const errorCode = err.response;
+
+                    const errorList = []
+                    for (const error in errorCode) {
+                        errorList.push(`${error} ${errorCode[error]}`)
+                    }
+                })
+        } else {
+
+
+        }
+    }
+    render() {
+        const { user } = this.state;
+        const path = this.props.location.pathname;
+        const username = path.replace("/user/", "")
+        const dataShowHidden = {
+            popularTags: false,
+            globalFeed: false,
+            username
         }
         return (
             <div>
@@ -78,36 +120,22 @@ export class FeedPage extends Component {
                         {user.bio}
                     </Header.Subheader>
                 </Header>
-                <Menu pointing>
-                    <Menu.Item
-                        name='author'
-                        active={activeIndex === 'author'}
-                        onClick={this.fetchFeeds}
+                <Header.Subheader align="right">
+                    <Button align="right" as='div' labelPosition='right'
+                        onClick={this.followUser}
                     >
-
-                        <Icon name='user' />
-                        {user.username} Feed
-                    </Menu.Item>
-                    <Menu.Item
-                        name='favorited'
-                        // className={isUserLogin ? "" : "displayNone"}
-                        active={activeIndex === 'favorited'}
-                        onClick={this.fetchFeeds}
-
-                    >
-                        <Icon name='heart' />
-
-                        Favorited Feeds
-                    </Menu.Item>
-                </Menu>
-                {
-                    feedLoader ?
-                        <Spinner text="Fetching Feeds" /> : <Feeds
-                            //  userClicked={userClicked}
-                            feeds={feeds}
-                        //   favoriteArticle={favoriteArticle}
-                        />
-                }
+                        <Button basic color={user.following ? "green" : "blue"}>
+                            <Icon name='add user' />
+                            {/* {follow}  */}
+                            {user.following ? "UnFollow" : "Follow"}
+                        </Button>
+                        <Label as='a' basic color={user.following ? "green" : "blue"} pointing='left'>
+                            {user.username}
+                        </Label>
+                    </Button>
+                </Header.Subheader>
+                {/* </Header> */}
+                <Home dataShowHidden={dataShowHidden} />
 
             </div >
         )
@@ -116,15 +144,8 @@ export class FeedPage extends Component {
 
 const mapStateToProps = (state) => ({
     userDetails: state.user.user,
-    feeds: state.userFeeds.feeds,
-    feedLoader: state.userFeeds.feedLoader,
 })
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({
-        fetchArticleBySlag,
-        fetchConditionalFeeds
-    }, dispatch)
-}
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(FeedPage))
+
+export default withRouter(connect(mapStateToProps)(FeedPage))

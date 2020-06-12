@@ -1,6 +1,7 @@
 import React from 'react'
 import { Label, Segment, Header, Divider } from 'semantic-ui-react'
 import Spinner from '../loader';
+import { popularTagConstant } from '../../utils/feedConstant'
 
 export const TagList = (props) => {
 
@@ -15,7 +16,7 @@ export const TagList = (props) => {
 
         <Segment>
             <Header as='h2' floated='right'>
-                Popular Tags
+                {popularTagConstant}
             </Header>
 
             <Divider clearing />

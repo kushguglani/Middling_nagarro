@@ -1,3 +1,5 @@
+import { feed_types } from '../type';
+
 const InitailStore = {
     feeds: [],
     tags: [],
@@ -14,49 +16,50 @@ const InitailStore = {
 
 export const userFeeds = (store = InitailStore, action) => {
     switch (action.type) {
-        case 'FETCH_FEEDS': {
+        case feed_types.FETCH_FEEDS: {
             return {
                 ...store,
                 feeds: action.payload,
                 tempFeed:action.payload,
                 feedLoader: false,
                 redirectTo:"",
-                articlesCount:action.articlesCount
+                articlesCount:action.articlesCount,
+                searchValue:""
             }
         }
-        case 'FETCH_TAGS': {
+        case feed_types.FETCH_TAGS: {
             return {
                 ...store,
                 tags: action.payload,
                 tagLoader:false,
             }
         }
-        case 'SELECTED_TAG': {
+        case feed_types.SELECTED_TAG: {
             return {
                 ...store,
                 selectedTag: action.payload,
                 activeIndex:"1"
             }
         }
-        case 'START_LOADER' : {
+        case feed_types.START_LOADER : {
             return {
                 ...store,
                 [action.payload]:true
             }
         }
-        case 'CHANGE_ACTIVE_TAB' : {
+        case feed_types.CHANGE_ACTIVE_TAB : {
             return {
                 ...store,
                 activeTab:action.payload
             }
         }
-        case 'REDIRECT_TO' :{
+        case feed_types.REDIRECT_TO :{
             return {
                 ...store,
                 redirectTo:action.payload
             }
         }
-        case 'EDIT_FEEDS' :{
+        case feed_types.EDIT_FEEDS :{
             const feeds = store.feeds.map(function( obj ) {
                  if(obj.slug == action.payload.slug){
                      obj.favorited=action.payload.favorited;
@@ -73,7 +76,7 @@ export const userFeeds = (store = InitailStore, action) => {
                 tempFeed:feeds,
             }
         }
-        case 'SEARCH_FEEDS':{
+        case feed_types.SEARCH_FEEDS:{
             const feeds = store.tempFeed.filter(curr=>{
                 return curr.title.toLowerCase().indexOf(action.payload.toLowerCase()) !==-1
             })

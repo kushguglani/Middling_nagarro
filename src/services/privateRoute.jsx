@@ -39,11 +39,6 @@ function initMapStateToProps(state) {
 
 
 
-// PrivateRoute.defaultProps = {
-//     signInRequired: this.signInRequired,
-//     authToken: Boolean(this.getAuthToken),
-// };
-
 PrivateRoute.propTypes = {
     signInRequired: PropTypes.bool,
     authToken: PropTypes.string,

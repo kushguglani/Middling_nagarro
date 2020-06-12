@@ -26,7 +26,6 @@ const routes = (
         <Route path="/settings" ><Base> <UserSettings /> </Base></Route>
         <Route path="/articles/:id" ><Base> <FeedPage /> </Base></Route>
         <Route path="/user/:id" ><Base> <UserPage /> </Base></Route>
-        <PrivateRoute path="/signup" ><Base> <Login /></Base> </PrivateRoute>
     </Switch>
 )
 

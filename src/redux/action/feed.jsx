@@ -11,6 +11,7 @@ import {
     followUserService,
     fetchUserService
 } from '../../services/httpServices'
+import { feed_types } from '../type';
 
 export const fetchFeeds = (val, header = {}) => {
     return dispatch => {
@@ -19,7 +20,7 @@ export const fetchFeeds = (val, header = {}) => {
         dispatch(startSpinner("feedLoader"))
         fetchfeedsService(val, header).then(res => {
             dispatch({
-                type: "FETCH_FEEDS",
+                type: feed_types.FETCH_FEEDS,
                 payload: res.data.articles,
                 articlesCount: res.data.articlesCount
             })
@@ -33,7 +34,7 @@ export const fetchTags = () => {
     return dispatch => {
         fetchTagsService().then(res => {
             dispatch({
-                type: "FETCH_TAGS",
+                type: feed_types.FETCH_TAGS,
                 payload: res.data.tags
             })
         })
@@ -45,7 +46,7 @@ export const fetchTags = () => {
 export const changeActiveTab = (tab) => {
 
     return {
-        type: "CHANGE_ACTIVE_TAB",
+        type: feed_types.CHANGE_ACTIVE_TAB,
         payload: tab
     };
 }
@@ -57,7 +58,7 @@ export const fetchConditionalFeeds = (by, tag, val = 0, header = {}) => {
         dispatch(changeActiveTab(by))
         fetchConditionalFeedsService(by, tag, val, header).then(res => {
             dispatch({
-                type: "FETCH_FEEDS",
+                type: feed_types.FETCH_FEEDS,
                 payload: res.data.articles,
                 articlesCount: res.data.articlesCount
             })
@@ -70,31 +71,31 @@ export const fetchConditionalFeeds = (by, tag, val = 0, header = {}) => {
 export const addSelectedTag = (tag) => {
 
     return {
-        type: "SELECTED_TAG",
+        type: feed_types.SELECTED_TAG,
         payload: tag
     };
 }
 
 export const startSpinner = (loader) => {
     return {
-        type: "START_LOADER",
+        type: feed_types.START_LOADER,
         payload: loader
     };
 }
 export const redirect = (to) => {
     return {
-        type: "REDIRECT_TO",
+        type: feed_types.REDIRECT_TO,
         payload: to
     };
 }
 export const apiError = (err) => {
     return {
-        type: "API_ERROR",
+        type: feed_types.API_ERROR,
         payload: err
     };
 }
 export const createArticle = (articles, headers, user) => {
-    
+
     // return 
     return dispatch => {
         publishArticle(headers, articles).then(res => {
@@ -108,34 +109,34 @@ export const createArticle = (articles, headers, user) => {
 }
 
 export const favoriteArticle = (header, slug, method) => {
-    
+
     return dispatch => {
         favoriteArticleService(header, slug, method).then(res => {
-            
+
 
             dispatch({
-                type: "EDIT_FEEDS",
+                type: feed_types.EDIT_FEEDS,
                 payload: res.data.article
             })
 
         })
             .catch(err => {
-                
+
                 const errorCode = err.response;
-                
+
                 const errorList = []
                 for (const error in errorCode) {
                     errorList.push(`${error} ${errorCode[error]}`)
                 }
-                
+
                 // dispatch(errorOnUpdatingUser(errorList))
             })
     }
 
 }
 
-export const fetchArticleBySlag = (slagUrl,headers) => {
-    return fetchArticleBySlagService(slagUrl,headers)
+export const fetchArticleBySlag = (slagUrl, headers) => {
+    return fetchArticleBySlagService(slagUrl, headers)
     // .then(res => {
     //     
     //     return res.data.article;
@@ -151,7 +152,7 @@ export const addCommentToArticle = (slagUrl, body, header) => {
     return addCommentToArticleService(slagUrl, body, header)
 }
 export const deleteCommentToArticle = (slagUrl, id, header) => {
-    
+
 
 
     return deleteCommentToArticleService(slagUrl, id, header)
@@ -159,22 +160,22 @@ export const deleteCommentToArticle = (slagUrl, id, header) => {
 
 export const inputSearch = (data) => {
     return {
-        type: "SEARCH_FEEDS",
+        type: feed_types.SEARCH_FEEDS,
         payload: data
     };
 }
 export const favoriteArticleFeedPage = (header, slug, method) => {
-    
+
     return favoriteArticleService(header, slug, method)
 }
 
 
-export const followUser = (header, user, method)=>{
+export const followUser = (header, user, method) => {
     return followUserService(header, user, method)
 }
 
-export const fetchUser = (header,username)=>{
-    return fetchUserService(header,username)
+export const fetchUser = (header, username) => {
+    return fetchUserService(header, username)
 }
 
 

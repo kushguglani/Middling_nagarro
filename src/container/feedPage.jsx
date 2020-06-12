@@ -19,6 +19,7 @@ import {
     fetchUser
 } from "../redux/action/feed";
 import Spinner from '../component/loader'
+import { feedPageConstant } from '../utils/feedConstant'
 
 
 export class FeedPage extends Component {
@@ -34,12 +35,19 @@ export class FeedPage extends Component {
                 article: res.data.article
             }, () => {
                 fetchUser(header, this.state.article.author.username).then(res => {
-                    
+
 
                     this.setState({
                         user: res.data.profile
                     })
                 })
+                    .catch(err => {
+                        this.props.history.push("/")
+                        console.log("rdtyoipiuytryuiopliujh");
+                        console.log(err);
+                        console.log(err.response);
+
+                    })
             })
         })
         fetchCommnetsBySlag(this.props.location.pathname + "/comments")
@@ -47,6 +55,13 @@ export class FeedPage extends Component {
                 this.setState({
                     comments: res.data.comments
                 })
+            })
+            .catch(err => {
+                this.props.history.push("/")
+                console.log("rdtyoipiuytryuiopliujh");
+                console.log(err);
+                console.log(err.response);
+
             })
 
 
@@ -83,7 +98,7 @@ export class FeedPage extends Component {
             },
             header
         ).then(res => {
-            
+
             this.setState({
                 comments: [res.data.comment, ...comments],
                 body: "",
@@ -92,7 +107,7 @@ export class FeedPage extends Component {
 
         })
             .catch(err => {
-                
+
 
             })
     }
@@ -108,7 +123,7 @@ export class FeedPage extends Component {
         ).then(res => {
             fetchCommnetsBySlag(this.props.location.pathname + "/comments")
                 .then(res => {
-                    
+
 
                     this.setState({
                         comments: res.data.comments
@@ -123,16 +138,16 @@ export class FeedPage extends Component {
             let user = this.state.article.author.username;
             let method = this.state.user.following ? "DELETE" : "POST"
             followUser(header, user, method).then(res => {
-                
+
                 this.setState({
-                    user:res.data.profile
+                    user: res.data.profile
                 })
 
             })
                 .catch(err => {
-                    
+
                     const errorCode = err.response;
-                    
+
                     const errorList = []
                     for (const error in errorCode) {
                         errorList.push(`${error} ${errorCode[error]}`)
@@ -141,7 +156,7 @@ export class FeedPage extends Component {
                     // dispatch(errorOnUpdatingUser(errorList))
                 })
         } else {
-            
+
 
         }
     }
@@ -152,15 +167,15 @@ export class FeedPage extends Component {
             let slug = this.state.article.slug;
             let method = this.state.article.author.following ? "DELETE" : "POST"
             favoriteArticleFeedPage(header, slug, method).then(res => {
-                
+
                 this.setState({
                     article: res.data.article
                 })
             })
                 .catch(err => {
-                    
+
                     const errorCode = err.response;
-                    
+
                     const errorList = []
                     for (const error in errorCode) {
                         errorList.push(`${error} ${errorCode[error]}`)
@@ -169,14 +184,20 @@ export class FeedPage extends Component {
                     // dispatch(errorOnUpdatingUser(errorList))
                 })
         } else {
-            
+
 
         }
     }
     render() {
-        
-        
 
+
+        const { articleConstant,
+            follow,
+            by,
+            comments,
+            signin,
+            signup,
+            toAdd } = feedPageConstant;
         const { article, user } = this.state;
 
         if (!article || Object.keys(article).length < 1) {
@@ -199,7 +220,7 @@ export class FeedPage extends Component {
                                 <Button as='div' labelPosition='right' onClick={this.likeArticle}>
                                     <Button color={article.favorited ? "red" : "grey"}>
                                         <Icon name='heart' />
-                                        Article
+                                        {articleConstant}
                                     </Button>
                                     <Label as='a' basic color={article.favorited ? "red" : "grey"} pointing='left'>
                                         {article.favoritesCount}
@@ -208,7 +229,7 @@ export class FeedPage extends Component {
                                 <Button as='div' labelPosition='right' onClick={this.followUser}>
                                     <Button basic color={user.following ? "green" : "blue"}>
                                         <Icon name='add user' />
-                                        Follow
+                                        {user.following ? "UnFollow" : "Follow"}
                                     </Button>
                                     <Label as='a' basic color={user.following ? "green" : "blue"} pointing='left'>
                                         {article.author.username}
@@ -217,7 +238,7 @@ export class FeedPage extends Component {
                             </Grid.Column>
                             <Grid.Column >
                                 <Header.Subheader align='right'>
-                                    by:<strong> {article.author.username}</strong>
+                                    {by}:<strong> {article.author.username}</strong>
                                 </Header.Subheader>
                                 <Header.Subheader align='right'>
                                     {daysAgo(article.createdAt)}
@@ -231,7 +252,7 @@ export class FeedPage extends Component {
                     <Segment>{article.description}</Segment>
                     <Comment.Group>
                         <Header as='h3' dividing>
-                            Comments
+                            {comments}
                         </Header>
                         {this.state.comments.length > 0 ?
                             this.state.comments.map(curr =>
@@ -257,9 +278,9 @@ export class FeedPage extends Component {
                             </Form> :
                             <>
                                 <br />
-                                <Link to="/login">Sign in </Link> or
-                                <Link to="/login">Sign up </Link>
-                                to add comments on this article.
+                                <Link to="/login">{signin} in </Link> or
+                                <Link to="/login">{signup} up </Link>
+                                {toAdd} add comments on this article.
                             </>
                         }
 

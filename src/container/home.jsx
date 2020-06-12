@@ -16,21 +16,38 @@ class Home extends Component {
     state = { activeItem: 'home', activePage: 1, }
 
     componentDidMount() {
-        let header = {};
-        if (this.props.userDetails.token) {
-            header = { Authorization: "Token " + this.props.userDetails.token }
-        }
-        this.props.fetchFeeds(
-            (this.state.activePage - 1) * 20,
-            header
-        );
-        this.props.fetchTags();
+        this.callOnLoad()
+        
         this.setState({ activePage: 1 })
     }
     componentDidUpdate() {
 
         if (this.props.loginPage) this.props.history.push(`/login`)
+        // else this.callOnLoad()
     }
+
+    callOnLoad = () => {
+        console.log(this.props);
+        console.log(this.props.dataShowHidden);
+
+        let header = {};
+        if (this.props.userDetails.token) {
+            header = { Authorization: "Token " + this.props.userDetails.token }
+        }
+        if (this.props.dataShowHidden) {
+            this.fetchConditionalFeedsByTag("author", this.props.dataShowHidden.username)
+        }
+        else {
+            this.props.fetchFeeds(
+                (this.state.activePage - 1) * 20,
+                header
+            );
+
+        }
+        this.props.fetchTags();
+        
+    }
+
     handlePaginationChange = (e, { activePage }) => {
         let header = {};
         if (this.props.userDetails.token) {
@@ -39,6 +56,16 @@ class Home extends Component {
         const { activeTab, selectedTag, userDetails } = this.props;
         this.setState({ activePage }, () => {
             let offset = (this.state.activePage - 1) * 20;
+            let username = "";
+            console.log(this.props);
+
+            if (this.props.dataShowHidden && this.props.dataShowHidden.username) {
+                username = this.props.dataShowHidden.username
+            } else {
+                username = userDetails.username
+            }
+            console.log(username);
+
             switch (activeTab) {
                 case "globalFeed":
                     this.props.fetchFeeds(offset, header);
@@ -50,13 +77,13 @@ class Home extends Component {
                     break;
 
                 case "author":
-                    this.props.fetchConditionalFeeds("author", userDetails.username, offset,
+                    this.props.fetchConditionalFeeds("author", username, offset,
                         header)
                     break;
 
                 case "favorited":
-                    this.props.fetchConditionalFeeds("favorited", userDetails.username, offset,
-                        { Authorization: "Token " + userDetails.token });
+                    this.props.fetchConditionalFeeds("favorited", username, offset,
+                        header);
                     break;
 
                 default:
@@ -87,22 +114,22 @@ class Home extends Component {
         }
 
     }
-    userClicked=(to)=>{
-        this.props.history.push(to)
+    userClicked = (to) => {
+        this.props.history.push("/" + to)
 
     }
     render() {
         const { tags, userFeeds, panes, selectedTag, userDetails, isUserLogin,
             feedLoader, fetchConditionalFeeds, fetchFeeds, activeTab, tagLoader,
-            articlesCount, searchValue } = this.props
+            articlesCount, searchValue, dataShowHidden } = this.props
         return (
             <Grid className="feedContainerGrid">
                 <Grid.Column width={11}>
-                    <TabPane activeIndex={activeTab} feeds={userFeeds} selectedTag={selectedTag} fetchFeeds={fetchFeeds}
+                    <TabPane globalFeed={dataShowHidden} activeIndex={activeTab} feeds={userFeeds} selectedTag={selectedTag} fetchFeeds={fetchFeeds}
                         panes={panes} feedLoader={feedLoader} fetchConditionalFeeds={fetchConditionalFeeds}
                         userDetails={userDetails} isUserLogin={isUserLogin} userClicked={this.userClicked}
                         favoriteArticle={this.favoriteArticleClicked} />
-                    {searchValue === "" ?
+                    {searchValue === "" && articlesCount > 20 ?
                         <Pagination
                             activePage={this.state.activePage}
                             boundaryRange="2"
@@ -112,12 +139,15 @@ class Home extends Component {
                             totalPages={Math.ceil(articlesCount / 20)}
                         />
                         : ""}
+                    <p className="bottom-page-margin"></p>
 
                 </Grid.Column>
-                <Grid.Column width={5}>
-                    <TagList tags={tags} fetchConditionalFeeds={this.fetchConditionalFeedsByTag} tagLoader={tagLoader} />
+                {!this.props.dataShowHidden ?
+                    <Grid.Column width={5}>
+                        <TagList tags={tags} fetchConditionalFeeds={this.fetchConditionalFeedsByTag} tagLoader={tagLoader} />
 
-                </Grid.Column>
+                    </Grid.Column> : ""
+                }
                 {/* <Grid.Column width={1}>
                 </Grid.Column> */}
             </Grid>

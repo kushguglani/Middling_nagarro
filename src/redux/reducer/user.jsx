@@ -1,3 +1,5 @@
+
+import { user_types } from '../type';
 const InitialStore = {
     error: [],
     user: {},
@@ -9,7 +11,7 @@ const InitialStore = {
 
 export default function user(store = InitialStore, action) {
     switch (action.type) {
-        case 'ADD_USER':
+        case user_types.ADD_USER:
             return {
                 ...store,
                 user: action.payload,
@@ -18,7 +20,7 @@ export default function user(store = InitialStore, action) {
                 activeHeaderItem: "home",
                 loginPage:false
             }
-        case 'USER_ERROR':
+        case user_types.USER_ERROR:
             return {
                 ...store,
                 error: action.payload,
@@ -26,25 +28,25 @@ export default function user(store = InitialStore, action) {
                 user: {},
                 loginPage:false
             }
-        case 'USER_UPDATE_ERROR':
+        case user_types.USER_UPDATE_ERROR:
             return {
                 ...store,
                 updateUserMsz: action.payload,
                 loginPage:false
             }
-        case 'CHANGE_HEADER':
+        case user_types.CHANGE_HEADER:
             return {
                 ...store,
                 activeHeaderItem: action.payload,
                 loginPage:false
             }
-        case 'UPDATE_USER_MESSAGE':
+        case user_types.UPDATE_USER_MESSAGE:
             return {
                 ...store,
                 updateUserMsz: ["User Updated"],
                 user: { ...store.user, ...action.payload.user }
             }
-        case 'LOG_OUT':
+        case user_types.LOG_OUT:
             return {
                 error: [],
                 user: {},

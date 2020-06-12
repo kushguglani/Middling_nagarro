@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { Button, Checkbox, Form, Input } from 'semantic-ui-react'
 
+import { buttonConstant } from '../../utils/userConstant'
+
 const FormExampleForm = (props) => {
 
     const [signupFormObject, setSignupFormObject] = useState({ userName: "", email: "", password: "" });
@@ -36,10 +38,8 @@ const FormExampleForm = (props) => {
                 onClick={() => props.userSignup(signupFormObject)}
                 type='submit'
                 disabled={termsButton}>
-                Signup
+                {buttonConstant.signup}
             </Button>
-           
-
         </Form>
     )
 }

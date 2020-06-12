@@ -5,27 +5,30 @@ import {
     
 } from '../../services/httpServices'
 
+
+import { user_types } from '../type';
+
 export function addUser(user) {
     return {
-        type: "ADD_USER",
+        type: user_types.ADD_USER,
         payload: user
     }
 }
 export function errorOnAddingUser(error) {
     return {
-        type: "USER_ERROR",
+        type: user_types.USER_ERROR,
         payload: error
     }
 }
 export function errorOnUpdatingUser(error) {
     return {
-        type: "USER_UPDATE_ERROR",
+        type: user_types.USER_UPDATE_ERROR,
         payload: error
     }
 }
 export function changeAdnin(admin) {
     return {
-        type: "CHANGE_ADMIN",
+        type: user_types.CHANGE_ADMIN,
         payload: admin
     }
 }
@@ -74,7 +77,7 @@ export const userSignup = (user) => {
 
 export const changeActiveHeaderItem =(header)=>{
     return {
-        type: "CHANGE_HEADER",
+        type: user_types.CHANGE_HEADER,
         payload: header
     }
 }
@@ -88,7 +91,7 @@ export const updateUserSettings = (header,user)=>{
         .then(res => {
             
             dispatch({
-                type: "UPDATE_USER_MESSAGE",
+                type: user_types.UPDATE_USER_MESSAGE,
                 payload: res.data
             })
         })
@@ -109,7 +112,7 @@ export const updateUserSettings = (header,user)=>{
 
 export const logout =(header)=>{
     return {
-        type: "LOG_OUT",
+        type: user_types.LOG_OUT,
         payload: header
     }
 }

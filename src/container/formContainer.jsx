@@ -17,6 +17,7 @@ import {
 import Login from '../component/user/login';
 import Signup from '../component/user/signup';
 import { withRouter } from 'react-router-dom';
+import {buttonConstant} from '../utils/userConstant'
 
 class FormController extends Component {
   componentDidMount(){
@@ -28,6 +29,9 @@ class FormController extends Component {
     if(this.props.isUserLogin)  this.props.history.push(`/`)
   }
   render() {
+    const {signin,
+      signup,
+      or} = buttonConstant
     let { userLogin, userSignup, error,isUserLogin } = this.props;
     // isUserLogin && 
     // this.props.history.push(`/${this.state.activeItem}`)
@@ -35,20 +39,20 @@ class FormController extends Component {
       <>
         <Segment placeholder>
           <Grid columns={2} stackable textAlign='center'>
-            <Divider vertical>Or</Divider>
+            <Divider vertical>{or}</Divider>
 
             {/* <Grid.Row verticalAlign='middle'> */}
             <Grid.Row >
               <Grid.Column>
                 <Header >
-                  Login
+                  {signin}
           </Header>
                 <Login userLogin={(data) => userLogin(data)} />
               </Grid.Column>
 
               <Grid.Column>
                 <Header >
-                  Signup
+                  {signup}
           </Header>
                 <Signup userSignup={(data) => userSignup(data)} />
               </Grid.Column>

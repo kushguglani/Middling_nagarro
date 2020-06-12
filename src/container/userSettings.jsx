@@ -46,8 +46,6 @@ function UserSettings(props) {
                 visible
                 positive
                 header='User Updated Successfully'
-
-
             />
         }
 
