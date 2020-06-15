@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Icon, Menu } from 'semantic-ui-react'
 import Feeds from './feeds'
 import Spinner from '../loader';
@@ -7,9 +7,9 @@ import { headerTabPane } from '../../utils/feedConstant'
 
 function TabPane(props) {
 
-    const { feedLoader, feeds, userDetails, activeIndex, userClicked, globalFeed,
+    const { feedLoader, feeds, userDetails, activeIndex, userClicked, globalFeed, fetchFollowedFeeds,
         selectedTag, fetchFeeds, fetchConditionalFeeds, isUserLogin, favoriteArticle } = props;
-    let header = {},username=""
+    let header = {}, username = ""
     if (userDetails.token)
         header = { Authorization: "Token " + userDetails.token };
     if (globalFeed && globalFeed.username) {
@@ -18,25 +18,33 @@ function TabPane(props) {
         username = userDetails.username
     }
     const onFetchFeeds = (e, { name }) => {
-        console.log("00000000000000000000");
 
         fetchConditionalFeeds(name, username, 0, header)
     }
-    const { your_feed, global_feed, favorited_feeds } = headerTabPane;
-    console.log(globalFeed);
+    const { your_feed, global_feed, favorited_articles, articleConstant } = headerTabPane;
 
     return (
         <>
             <Menu pointing>
+
                 <Menu.Item
-                    className={isUserLogin || globalFeed ? "" : "displayNone"}
+                    className={isUserLogin && !globalFeed ? "" : "displayNone"}
+                    name='author'
+                    active={activeIndex === 'author'}
+                    onClick={() => fetchFollowedFeeds(0, header)}
+                >
+                    <Icon name='user' />
+                    {your_feed}
+                </Menu.Item>
+                <Menu.Item
+                    className={globalFeed ? "" : "displayNone"}
                     name='author'
                     active={activeIndex === 'author'}
                     onClick={onFetchFeeds}
                 >
 
                     <Icon name='user' />
-                    {your_feed}
+                    {username} {articleConstant}
                 </Menu.Item>
                 <Menu.Item
                     className={!globalFeed ? "" : "displayNone"}
@@ -57,7 +65,7 @@ function TabPane(props) {
                 >
                     <Icon name='heart' />
 
-                    {favorited_feeds}
+                    {favorited_articles}
                 </Menu.Item>
                 <Menu.Item
                     className={selectedTag === "" ? "displayNone" : ""}

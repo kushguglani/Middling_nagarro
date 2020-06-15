@@ -9,7 +9,10 @@ import {
     addCommentToArticleService,
     deleteCommentToArticleService,
     followUserService,
-    fetchUserService
+    fetchUserService,
+    fetchFollowedFeedsService,
+    deleteArticleService,
+    editArticleService
 } from '../../services/httpServices'
 import { feed_types } from '../type';
 
@@ -94,26 +97,15 @@ export const apiError = (err) => {
         payload: err
     };
 }
-export const createArticle = (articles, headers, user) => {
+export const createArticleAction = (articles, headers, user) => {
 
-    // return 
-    return dispatch => {
-        publishArticle(headers, articles).then(res => {
-            dispatch(fetchConditionalFeeds("author", user))
-            dispatch(redirect("/"))
-        })
-            .catch(error => {
-                dispatch(apiError({ error: error.response.data }));
-            })
-    }
+    return publishArticle(headers, articles)
 }
 
 export const favoriteArticle = (header, slug, method) => {
 
     return dispatch => {
         favoriteArticleService(header, slug, method).then(res => {
-
-
             dispatch({
                 type: feed_types.EDIT_FEEDS,
                 payload: res.data.article
@@ -178,4 +170,46 @@ export const fetchUser = (header, username) => {
     return fetchUserService(header, username)
 }
 
+export const fetchFollowedFeeds = (val, headers) => {
 
+    return dispatch => {
+        
+        dispatch(changeActiveTab("author"))
+        fetchFollowedFeedsService(val, headers).then(res => {
+            dispatch({
+                type: feed_types.FETCH_FEEDS,
+                payload: res.data.articles,
+                articlesCount: res.data.articlesCount
+            })
+        })
+    }
+}
+
+
+export const deleteArticle = (slug, headers) => {
+    return deleteArticleService(slug, headers)
+}
+
+
+export const editArticle = (article) => {
+    return {
+        type: feed_types.EDIT_ARTICLE,
+        payload: article
+    }
+}
+
+
+export const submitEditArticle = (articles, headers, slug) => {
+
+    return dispatch => {
+        editArticleService(headers, articles, slug).then(res => {
+            
+            dispatch({
+                type: feed_types.EDITED_ARTICLE,
+            })
+        })
+            .catch(err => {
+
+            })
+    }
+}

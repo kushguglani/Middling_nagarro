@@ -32,7 +32,7 @@ class FormController extends Component {
     const {signin,
       signup,
       or} = buttonConstant
-    let { userLogin, userSignup, error,isUserLogin } = this.props;
+    let { userLogin, userSignup, error } = this.props;
     // isUserLogin && 
     // this.props.history.push(`/${this.state.activeItem}`)
     return (

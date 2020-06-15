@@ -15,5 +15,6 @@ export const header = {
     new_article:"New Article",
     setting:"Setting",
     log_out:"Logout",
-    signin: "Signin"
+    signin: "Signin",
+    edit_article: "Edit Article"
 }

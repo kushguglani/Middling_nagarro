@@ -4,13 +4,19 @@ import { Input, Menu, Button, Icon, Image } from 'semantic-ui-react';
 import { projectName, header } from '../utils/userConstant'
 
 const HeaderMenu = props => {
-  const { activeItem, handleItemClick,
-    userDetails, location, isUserLogin, logout, inputSearch,searchValue,userButtonClicked } = props
+  const { activeItem, handleItemClick, editArticle,
+    userDetails, location, isUserLogin, logout, inputSearch, searchValue, userButtonClicked } = props
   const { title, description } = projectName
   const { new_article,
     setting,
     log_out,
+    edit_article,
     signin } = header;
+    console.log(location === "home");
+    console.log(location === "/");
+    console.log(location);
+    
+    
   return (
     <>
       <h2 className="header-logo">{title} <span className="header-title">
@@ -23,7 +29,7 @@ const HeaderMenu = props => {
         />
         <Menu.Menu >
           <Menu.Item
-            className={location === "/login" ? "displayNone" : ""}
+            className={location === "/home" || location === "/" || activeItem ==="user" ? "" : "displayNone"}
           >
             <Input icon='search' placeholder='Search feed by Title' value={searchValue}
               onChange={(e) => inputSearch(e.target.value)} />
@@ -37,7 +43,7 @@ const HeaderMenu = props => {
           onClick={handleItemClick}
         >
           <Icon name='edit' />
-          {new_article}
+          {Object.keys(editArticle).length > 0 ? edit_article : new_article}
         </Menu.Item>
         <Menu.Item
           name='settings'

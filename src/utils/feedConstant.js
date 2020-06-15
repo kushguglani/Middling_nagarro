@@ -7,7 +7,8 @@ export const feedPageConsatnt = {
 export const headerTabPane = {
     your_feed: "Your Feed",
     global_feed: "Global Feed",
-    favorited_feeds: "Favorited Feeds"
+    favorited_articles: "Favorited Articles",
+    articleConstant: "Article",
 }
 
 export const popularTagConstant = "Popular Tags"
@@ -19,5 +20,11 @@ export const feedPageConstant = {
     comments: "Comments",
     signin: "Sign in",
     signup: "Sign up",
-    toAdd: "to add comments on this article"
+    toAdd: "to add comments on this article",
+    edit_article:"Edit Article",
+    delete_article:"Delete Article"
+}
+export const createArticleConstant = {
+    publishAricleContant:"Publish Article",
+     editArticleContsant:"Edit Article"
 }

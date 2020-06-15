@@ -10,7 +10,7 @@ import UserSettings from '../container/userSettings'
 import UserPage from '../container/userPage'
 import FeedPage from '../container/feedPage'
 import Base from '../component/base';
-import PrivateRoute from './privateRoute'
+// import PrivateRoute from './privateRoute'
 
 
 const routes = (

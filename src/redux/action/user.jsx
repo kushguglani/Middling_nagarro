@@ -2,7 +2,7 @@ import {
     userLoginService,
     userSignUpService,
     updateUser
-    
+
 } from '../../services/httpServices'
 
 
@@ -40,7 +40,7 @@ export const userLogin = (user) => {
     return dispatch => {
         userLoginService(userObject)
             .then(res => {
-        
+
                 dispatch(addUser(res.data.user))
             })
             .catch(err => {
@@ -55,12 +55,12 @@ export const userLogin = (user) => {
 }
 
 export const userSignup = (user) => {
-    
+
     const userObject = { user }
     return dispatch => {
         userSignUpService(userObject)
             .then(res => {
-        
+
                 dispatch(addUser(res.data.user))
             })
             .catch(err => {
@@ -75,42 +75,42 @@ export const userSignup = (user) => {
     }
 }
 
-export const changeActiveHeaderItem =(header)=>{
+export const changeActiveHeaderItem = (header) => {
     return {
         type: user_types.CHANGE_HEADER,
         payload: header
     }
 }
 
-export const updateUserSettings = (header,user)=>{
-    
-    
-    
+export const updateUserSettings = (header, user) => {
+
+
+
     return dispatch => {
-        updateUser(header,user)
-        .then(res => {
-            
-            dispatch({
-                type: user_types.UPDATE_USER_MESSAGE,
-                payload: res.data
+        updateUser(header, user)
+            .then(res => {
+
+                dispatch({
+                    type: user_types.UPDATE_USER_MESSAGE,
+                    payload: res.data
+                })
             })
-        })
-        .catch(err => {
-            
-            const errorCode = err.response.data.errors;
-            const errorList = []
-            for (const error in errorCode) {
-                errorList.push(`${error} ${errorCode[error]}`)
-            }
-            
-            dispatch(errorOnUpdatingUser(errorList))
-        })
+            .catch(err => {
+
+                const errorCode = err.response.data.errors;
+                const errorList = []
+                for (const error in errorCode) {
+                    errorList.push(`${error} ${errorCode[error]}`)
+                }
+
+                dispatch(errorOnUpdatingUser(errorList))
+            })
     }
 }
 
 
 
-export const logout =(header)=>{
+export const logout = (header) => {
     return {
         type: user_types.LOG_OUT,
         payload: header

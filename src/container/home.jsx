@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import {
     fetchFeeds, fetchTags,
-    fetchConditionalFeeds, createArticle,
-    favoriteArticle
+    fetchConditionalFeeds,
+    favoriteArticle,fetchFollowedFeeds
 } from "../redux/action/feed";
 import { Grid, Pagination } from 'semantic-ui-react'
 
@@ -27,8 +27,6 @@ class Home extends Component {
     }
 
     callOnLoad = () => {
-        console.log(this.props);
-        console.log(this.props.dataShowHidden);
 
         let header = {};
         if (this.props.userDetails.token) {
@@ -57,14 +55,12 @@ class Home extends Component {
         this.setState({ activePage }, () => {
             let offset = (this.state.activePage - 1) * 20;
             let username = "";
-            console.log(this.props);
 
             if (this.props.dataShowHidden && this.props.dataShowHidden.username) {
                 username = this.props.dataShowHidden.username
             } else {
                 username = userDetails.username
             }
-            console.log(username);
 
             switch (activeTab) {
                 case "globalFeed":
@@ -119,14 +115,14 @@ class Home extends Component {
 
     }
     render() {
-        const { tags, userFeeds, panes, selectedTag, userDetails, isUserLogin,
+        const { tags, userFeeds, panes, selectedTag, userDetails, isUserLogin,fetchFollowedFeeds,
             feedLoader, fetchConditionalFeeds, fetchFeeds, activeTab, tagLoader,
             articlesCount, searchValue, dataShowHidden } = this.props
         return (
             <Grid className="feedContainerGrid">
                 <Grid.Column width={11}>
                     <TabPane globalFeed={dataShowHidden} activeIndex={activeTab} feeds={userFeeds} selectedTag={selectedTag} fetchFeeds={fetchFeeds}
-                        panes={panes} feedLoader={feedLoader} fetchConditionalFeeds={fetchConditionalFeeds}
+                        panes={panes} feedLoader={feedLoader} fetchFollowedFeeds={fetchFollowedFeeds} fetchConditionalFeeds={fetchConditionalFeeds}
                         userDetails={userDetails} isUserLogin={isUserLogin} userClicked={this.userClicked}
                         favoriteArticle={this.favoriteArticleClicked} />
                     {searchValue === "" && articlesCount > 20 ?
@@ -178,8 +174,8 @@ function initMapDispatchToProps(dispatch) {
         fetchFeeds,
         fetchTags,
         fetchConditionalFeeds,
-        createArticle,
-        favoriteArticle
+        favoriteArticle,
+        fetchFollowedFeeds
     }, dispatch)
 }
 

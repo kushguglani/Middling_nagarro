@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withRouter, Link } from 'react-router-dom'
 import {
-    Segment, Container, Comment,
+    Segment, Container, Comment,Message,
     Icon, Label, Form, Button, Header, Grid
 } from 'semantic-ui-react'
 
@@ -16,40 +16,44 @@ import {
     deleteCommentToArticle,
     favoriteArticleFeedPage,
     followUser,
-    fetchUser
+    fetchUser,
+    deleteArticle,
+    editArticle
 } from "../redux/action/feed";
 import Spinner from '../component/loader'
 import { feedPageConstant } from '../utils/feedConstant'
-
+import Modal from '../component/modal'
 
 export class FeedPage extends Component {
-    state = { article: {}, comments: [], user: {}, body: "", disabled: true }
+    state = { article: {}, comments: [], user: {}, body: "", disabled: true, modal: false,error:[] }
 
     componentDidMount() {
         let header = {};
         if (this.props.userDetails.token) {
             header = { Authorization: "Token " + this.props.userDetails.token }
         }
+
         fetchArticleBySlag(this.props.location.pathname, header).then(res => {
             this.setState({
                 article: res.data.article
             }, () => {
                 fetchUser(header, this.state.article.author.username).then(res => {
-
-
                     this.setState({
                         user: res.data.profile
                     })
                 })
                     .catch(err => {
-                        this.props.history.push("/")
-                        console.log("rdtyoipiuytryuiopliujh");
-                        console.log(err);
-                        console.log(err.response);
+
+                        // this.props.history.push("/")
 
                     })
             })
         })
+            .catch(err => {
+
+                // this.props.history.push("/")
+
+            })
         fetchCommnetsBySlag(this.props.location.pathname + "/comments")
             .then(res => {
                 this.setState({
@@ -57,14 +61,25 @@ export class FeedPage extends Component {
                 })
             })
             .catch(err => {
-                this.props.history.push("/")
-                console.log("rdtyoipiuytryuiopliujh");
-                console.log(err);
-                console.log(err.response);
+
+                // this.props.history.push("/")
 
             })
+    }
+    onDeleteArticle = () => {
+        let header = {};
+        if (this.props.userDetails.token) {
+            header = { Authorization: "Token " + this.props.userDetails.token }
+            deleteArticle(this.state.article.slug, header).then(res => {
+                if (res.data) {
+                    this.setState({
+                        modal: false
+                    })
 
-
+                    this.props.history.push("/")
+                }
+            })
+        }
     }
     handleInputChnage = (event) => {
         this.setState({
@@ -85,7 +100,7 @@ export class FeedPage extends Component {
 
     }
     addComments = () => {
-        const { body, comments, user } = this.state;
+        const { body, comments } = this.state;
         let header = {};
         if (this.props.userDetails.token) {
             header = { Authorization: "Token " + this.props.userDetails.token }
@@ -156,16 +171,20 @@ export class FeedPage extends Component {
                     // dispatch(errorOnUpdatingUser(errorList))
                 })
         } else {
-
+            this.setState({
+                error:["Please signin before follow this user"]
+            })
 
         }
     }
     likeArticle = () => {
         let header = {};
+
         if (this.props.userDetails.token) {
             header = { Authorization: "Token " + this.props.userDetails.token }
             let slug = this.state.article.slug;
-            let method = this.state.article.author.following ? "DELETE" : "POST"
+            let method = this.state.article.favorited ? "DELETE" : "POST"
+
             favoriteArticleFeedPage(header, slug, method).then(res => {
 
                 this.setState({
@@ -185,24 +204,31 @@ export class FeedPage extends Component {
                 })
         } else {
 
+            this.setState({
+                error:["Please signin before liking this article"]
+            })
 
         }
     }
+    editButtonArticle= (article)=>{
+        this.props.editArticle(article);
+        this.props.history.push("/newArticle")
+    }
     render() {
-
-
         const { articleConstant,
-            follow,
             by,
             comments,
+            delete_article,
+            edit_article,
             signin,
             signup,
             toAdd } = feedPageConstant;
         const { article, user } = this.state;
 
-        if (!article || Object.keys(article).length < 1) {
+        if (!article || Object.keys(article).length < 1 || !user.username) {
             return <Spinner text="Fetching article" />
         }
+
         return (
             <div>
                 <Header
@@ -225,16 +251,28 @@ export class FeedPage extends Component {
                                     <Label as='a' basic color={article.favorited ? "red" : "grey"} pointing='left'>
                                         {article.favoritesCount}
                                     </Label>
-                                </Button>
-                                <Button as='div' labelPosition='right' onClick={this.followUser}>
-                                    <Button basic color={user.following ? "green" : "blue"}>
-                                        <Icon name='add user' />
-                                        {user.following ? "UnFollow" : "Follow"}
+                                </Button>&nbsp;
+                                {this.props.userDetails.username !== user.username ?
+                                    <Button as='div' labelPosition='right' onClick={this.followUser}>
+                                        <Button basic color={user.following ? "green" : "blue"}>
+                                            <Icon name='add user' />
+                                            {user.following ? "UnFollow" : "Follow"}
+                                        </Button>
+                                        <Label as='a' basic color={user.following ? "green" : "blue"} pointing='left'>
+                                            {article.author.username}
+                                        </Label>
                                     </Button>
-                                    <Label as='a' basic color={user.following ? "green" : "blue"} pointing='left'>
-                                        {article.author.username}
-                                    </Label>
-                                </Button>
+                                    : <Button.Group>
+                                        <Button color="blue"
+                                            onClick={() => this.editButtonArticle(article)}
+                                        >{edit_article}</Button>
+                                        <Button.Or />
+                                        <Button
+                                            onClick={() => this.setState({
+                                                modal: true
+                                            })}
+                                        >{delete_article}</Button>
+                                    </Button.Group>}
                             </Grid.Column>
                             <Grid.Column >
                                 <Header.Subheader align='right'>
@@ -283,10 +321,23 @@ export class FeedPage extends Component {
                                 {toAdd} add comments on this article.
                             </>
                         }
-
-
                     </Comment.Group>
+                    {this.state.modal &&
+                        <Modal article={article} yesClicked={this.onDeleteArticle}
+                            yesClicked={this.onDeleteArticle}
+                            noClicked={() => this.setState({ modal: false })}
+                        />}
                 </Container>
+                {this.state.error.length > 0 && <Message
+                    visible
+                    error
+                    header='There was some errors with your submission'
+                    list={
+                        this.state.error
+                    }
+                />
+
+                }
             </div >
         )
     }
@@ -298,7 +349,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
-        fetchArticleBySlag
+        fetchArticleBySlag,
+        editArticle
     }, dispatch)
 }
 

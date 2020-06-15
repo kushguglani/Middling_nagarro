@@ -35,7 +35,7 @@ const Feeds = (props) => {
               <Label key={i} className="tag-cursor" >{curr}</Label>
             )}
             {curr.tagList.length > 0 && <br />}
-            <Link to={`articles/${curr.slug}`}>{read_more}</Link>
+            <Link to={`/articles/${curr.slug}`}>{read_more}</Link>
           </Feed.Content>
         </Feed.Event>
       )

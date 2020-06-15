@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { Input, TextArea, Button, Form, Message, Icon } from 'semantic-ui-react'
+import React, { useState } from 'react'
+import { Input, TextArea, Button, Form, Message } from 'semantic-ui-react'
 import { updateUserSettings } from "../redux/action/user";
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
@@ -25,7 +25,7 @@ function UserSettings(props) {
             { Authorization: "Token " + props.jwt }, data)
 
     }
-    if (props.redirectTo != "") {
+    if (props.redirectTo !== "") {
         return <Redirect to={props.redirectTo} />;
     }
     let msz = "";

@@ -12,3 +12,4 @@ export const UPDATE_ARTICLES = "articles/:slug";
 export const DELETE_ARTICLES = "articles/:slug";
 export const ADD_COOMENTS_ARTICLES = "articles/:slug/comments";
 export const GET_TAGS = "tags";
+export const FEED = "/feed";

@@ -8,7 +8,6 @@ export const user_types = {
     LOG_OUT: "LOG_OUT",
 }
 export const feed_types = {
-    FETCH_FEEDS: "FETCH_FEEDS",
     FETCH_TAGS: "FETCH_TAGS",
     CHANGE_ACTIVE_TAB: "CHANGE_ACTIVE_TAB",
     FETCH_FEEDS: "FETCH_FEEDS",
@@ -18,4 +17,6 @@ export const feed_types = {
     API_ERROR: "API_ERROR",
     EDIT_FEEDS: "EDIT_FEEDS",
     SEARCH_FEEDS: "SEARCH_FEEDS",
+    EDIT_ARTICLE:"EDIT_ARTICLE",
+    EDITED_ARTICLE:"EDITED_ARTICLE",
 }
